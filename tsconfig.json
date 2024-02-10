@@ -13,8 +13,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": "./",
-    "typeRoots": ["./src/types"]
+    "baseUrl": "./src",
+    "typeRoots": ["./src/types"],
+    "paths": {
+      "/*": ["./src/*"]
+    }
   },
   "include": ["./src"],
   "ts-node": {

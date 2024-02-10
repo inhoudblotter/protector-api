@@ -4,12 +4,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { Client } from "pg";
 import { database } from "./middlewares/database";
-import clientRouter from "src/routes/client";
-import orderRouter from "src/routes/order";
-import authRouter from "src/routes/auth";
-import ordersRouter from "src/routes/orders";
-import settingsRouter from "src/routes/settings";
-import freeTimeRouter from "src/routes/freeTime";
+import clientRouter from "routes/client";
+import orderRouter from "routes/order";
+import authRouter from "routes/auth";
+import ordersRouter from "routes/orders";
+import settingsRouter from "routes/settings";
+import freeTimeRouter from "routes/freeTime";
 import { errorHandler } from "./middlewares/errorHandler";
 
 dotenv.config();

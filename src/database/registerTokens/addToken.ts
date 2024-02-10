@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { getToken } from "src/utils/getToken";
+import { getToken } from "utils/getToken";
 
 export async function addToken(db: Client, salt = Math.random() * 31321464) {
   const token = getToken(new Date().getTime().toString(32), salt);

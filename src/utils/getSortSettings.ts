@@ -1,5 +1,5 @@
-import { SORT_COLUMNS, SORT_DIRECTION } from "src/config/constants";
-import { ISortSetting } from "src/types/ISortSettings";
+import { SORT_COLUMNS, SORT_DIRECTION } from "config/constants";
+import { ISortSetting } from "types/ISortSettings";
 
 export function getSortSettings(
   sortBy: string | undefined,

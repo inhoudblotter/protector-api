@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { IUser } from "src/types/IUser";
+import { IUser } from "types/IUser";
 
 export async function getUser(db: Client, user: IUser) {
   const res = await db.query<{ id: number; pass: string }>(

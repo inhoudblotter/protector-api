@@ -1,19 +1,19 @@
 import { Router } from "express";
-import { updateCar } from "src/database/cars/updateCar";
-import { updateClient } from "src/database/client/updateClient";
-import { addOrder } from "src/database/order/addOrder";
-import { deleteOrder } from "src/database/order/deleteOrder";
-import { doneOrder } from "src/database/order/doneOrder";
-import { getOrder } from "src/database/order/getOrder";
-import { updateOrder } from "src/database/order/updateOrder";
-import { getOrdersSliceForCheck } from "src/database/orders/getOrdersSliceForCheck";
-import { getSettings } from "src/database/settings/getSettings";
-import { auth } from "src/middlewares/auth";
-import { isNewOrder } from "src/types/typeGuards/isNewOrder";
-import { isOrderUpdate } from "src/types/typeGuards/isOrderUpdate";
-import { checkCorrectOrderInsert } from "src/utils/checkCorrectOrderInsert";
-import { getCompletionTimestamp } from "src/utils/getCompletionTimestamp";
-import { getLeadTime } from "src/utils/getLeadTime";
+import { updateCar } from "database/cars/updateCar";
+import { updateClient } from "database/client/updateClient";
+import { addOrder } from "database/order/addOrder";
+import { deleteOrder } from "database/order/deleteOrder";
+import { doneOrder } from "database/order/doneOrder";
+import { getOrder } from "database/order/getOrder";
+import { updateOrder } from "database/order/updateOrder";
+import { getOrdersSliceForCheck } from "database/orders/getOrdersSliceForCheck";
+import { getSettings } from "database/settings/getSettings";
+import { auth } from "middlewares/auth";
+import { isNewOrder } from "types/typeGuards/isNewOrder";
+import { isOrderUpdate } from "types/typeGuards/isOrderUpdate";
+import { checkCorrectOrderInsert } from "utils/checkCorrectOrderInsert";
+import { getCompletionTimestamp } from "utils/getCompletionTimestamp";
+import { getLeadTime } from "utils/getLeadTime";
 
 const router = Router();
 
@@ -34,6 +34,7 @@ router.post("/", async (req, res) => {
         services,
         date,
         wheels,
+        leadTime,
         completionTimestamp
       );
       const dayStart = new Date(date);

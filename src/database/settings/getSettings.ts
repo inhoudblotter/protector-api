@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { ISettings } from "src/types/ISettings";
+import { ISettings } from "types/ISettings";
 
 export async function getSettings(db: Client): Promise<ISettings> {
   const settings: Partial<ISettings> = {};

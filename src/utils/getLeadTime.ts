@@ -1,8 +1,8 @@
-import { IServices } from "src/types/IServices";
+import { IServices } from "types/IServices";
 import {
   IServiceDefaultSettings,
   IServicesSettings,
-} from "src/types/IServicesSettings";
+} from "types/IServicesSettings";
 
 export function getLeadTime(
   services: IServices,

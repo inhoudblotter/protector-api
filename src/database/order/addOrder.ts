@@ -1,9 +1,9 @@
 import { Client } from "pg";
-import { IClient } from "src/types/IClient";
-import { ITimestamp } from "src/types/ITimestamp";
-import { IServices } from "src/types/IServices";
-import { SERVICES } from "src/config/constants";
-import { IWheels } from "src/types/IWheels";
+import { IClient } from "types/IClient";
+import { ITimestamp } from "types/ITimestamp";
+import { IServices } from "types/IServices";
+import { SERVICES } from "config/constants";
+import { IWheels } from "types/IWheels";
 
 export async function addOrder(
   db: Client,
@@ -11,6 +11,7 @@ export async function addOrder(
   services: IServices,
   date: ITimestamp,
   wheels: IWheels,
+  leadTime: number,
   completionTimestamp: string
 ) {
   let res;
@@ -50,7 +51,7 @@ export async function addOrder(
 
   res = await db.query<{ id: number }>(
     `
-    INSERT INTO orders (client_id, car_id, car_type, radius, quantity, order_timestamp, completion_timestamp, ${services
+    INSERT INTO orders (client_id, car_id, car_type, radius, quantity, lead_time, order_timestamp, completion_timestamp, ${services
       .map((s) => SERVICES.get(s))
       .join(", ")})
     VALUES ($1, $2, $3, $4, $5, $6, $7, ${services
@@ -64,6 +65,7 @@ export async function addOrder(
       client.carType,
       wheels.radius,
       wheels.quantity,
+      leadTime,
       new Date(date).toISOString(),
       completionTimestamp,
     ]

@@ -1,4 +1,4 @@
-import { FILTERS, SERVICES } from "src/config/constants";
+import { FILTERS, SERVICES } from "config/constants";
 
 export function getFilters(query: { [key: string]: any }) {
   const result: { [key: string]: any } = {};

@@ -1,5 +1,5 @@
-import { IServicesSettings } from "src/types/IServicesSettings";
-import { IWorkTime } from "src/types/IWorkTime";
+import { IServicesSettings } from "types/IServicesSettings";
+import { IWorkTime } from "types/IWorkTime";
 import { getMaxCars } from "./getMaxCars";
 
 export function getFreeTime(

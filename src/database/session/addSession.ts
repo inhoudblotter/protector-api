@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { getToken } from "src/utils/getToken";
+import { getToken } from "utils/getToken";
 
 export async function addSession(
   db: Client,

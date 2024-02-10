@@ -1,4 +1,4 @@
-import { IServicesSettings } from "src/types/IServicesSettings";
+import { IServicesSettings } from "types/IServicesSettings";
 import { getMaxCars } from "./getMaxCars";
 
 export function checkCorrectOrderInsert(

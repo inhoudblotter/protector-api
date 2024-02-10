@@ -1,7 +1,7 @@
-import { SERVICES } from "src/config/constants";
-import { IOrderResponse } from "src/types/IOrderResponse";
-import { IServices } from "src/types/IServices";
-import { IServicesSettings } from "src/types/IServicesSettings";
+import { SERVICES } from "config/constants";
+import { IOrderResponse } from "types/IOrderResponse";
+import { IServices } from "types/IServices";
+import { IServicesSettings } from "types/IServicesSettings";
 
 export function formatOrder(order: IOrderResponse) {
   const services: IServices = [];

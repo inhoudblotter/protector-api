@@ -1,4 +1,4 @@
-import { CAR_TYPES } from "src/config/constants";
+import { CAR_TYPES } from "config/constants";
 import { ICarType } from "../ICarType";
 
 export function isCarType(carType: unknown): carType is ICarType {

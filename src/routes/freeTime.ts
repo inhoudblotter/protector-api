@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { getOrdersSliceForCheck } from "src/database/orders/getOrdersSliceForCheck";
-import { getSettings } from "src/database/settings/getSettings";
-import { isDate } from "src/types/typeGuards/isDate";
-import { isServices } from "src/types/typeGuards/isServices";
-import { getFreeDays } from "src/utils/getFreeDays";
-import { getFreeTime } from "src/utils/getFreeTime";
-import { getLeadTime } from "src/utils/getLeadTime";
-import { getStartEndDay } from "src/utils/getStartEndDay";
-import { getStartEndExtendedMonth } from "src/utils/getStartEndExtendedMonth";
+import { getOrdersSliceForCheck } from "database/orders/getOrdersSliceForCheck";
+import { getSettings } from "database/settings/getSettings";
+import { isDate } from "types/typeGuards/isDate";
+import { isServices } from "types/typeGuards/isServices";
+import { getFreeDays } from "utils/getFreeDays";
+import { getFreeTime } from "utils/getFreeTime";
+import { getLeadTime } from "utils/getLeadTime";
+import { getStartEndDay } from "utils/getStartEndDay";
+import { getStartEndExtendedMonth } from "utils/getStartEndExtendedMonth";
 
 const router = Router();
 

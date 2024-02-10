@@ -1,5 +1,5 @@
-import { IWorkTime } from "src/types/IWorkTime";
-import { IServicesSettings } from "src/types/IServicesSettings";
+import { IWorkTime } from "types/IWorkTime";
+import { IServicesSettings } from "types/IServicesSettings";
 import { getMaxCars } from "./getMaxCars";
 import { roundDate } from "./roundDate";
 

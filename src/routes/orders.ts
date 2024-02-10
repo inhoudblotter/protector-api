@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { getOrders } from "src/database/orders/getOrders";
-import { getOrdersByDate } from "src/database/orders/getOrdersByDate";
-import { getOrderStats } from "src/database/orders/getOrdersStats";
-import { auth } from "src/middlewares/auth";
-import { isDate } from "src/types/typeGuards/isDate";
-import { getFilters } from "src/utils/getFilters";
-import { getSortSettings } from "src/utils/getSortSettings";
+import { getOrders } from "database/orders/getOrders";
+import { getOrdersByDate } from "database/orders/getOrdersByDate";
+import { getOrderStats } from "database/orders/getOrdersStats";
+import { auth } from "middlewares/auth";
+import { isDate } from "types/typeGuards/isDate";
+import { getFilters } from "utils/getFilters";
+import { getSortSettings } from "utils/getSortSettings";
 
 const router = Router();
 

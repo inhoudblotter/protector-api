@@ -1,4 +1,4 @@
-import { SERVICES } from "src/config/constants";
+import { SERVICES } from "config/constants";
 import { IServices } from "../IServices";
 
 export function isServices(services: unknown): services is IServices {

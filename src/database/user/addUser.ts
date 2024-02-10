@@ -1,6 +1,6 @@
 import { Client } from "pg";
-import { IUser } from "src/types/IUser";
-import { getHash } from "src/utils/getHash";
+import { IUser } from "types/IUser";
+import { getHash } from "utils/getHash";
 
 export async function addUser(db: Client, user: IUser) {
   const res = await db.query(

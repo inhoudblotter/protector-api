@@ -1,6 +1,6 @@
 import { Client } from "pg";
-import { IOrderResponse } from "src/types/IOrderResponse";
-import { formatOrder } from "src/utils/formatOrder";
+import { IOrderResponse } from "types/IOrderResponse";
+import { formatOrder } from "utils/formatOrder";
 
 export async function getOrder(db: Client, id: number) {
   const res = await db.query<IOrderResponse>(

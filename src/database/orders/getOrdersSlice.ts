@@ -1,6 +1,6 @@
 import { Client } from "pg";
-import { IOrderResponse } from "src/types/IOrderResponse";
-import { formatOrder } from "src/utils/formatOrder";
+import { IOrderResponse } from "types/IOrderResponse";
+import { formatOrder } from "utils/formatOrder";
 
 export async function getOrdersSlice(db: Client, start: string, end: string) {
   const res = await db.query<IOrderResponse>(

@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
-import { SESSION_COOKIE } from "src/config/constants";
-import { getSession } from "src/database/session/getSession";
-import { updateSession } from "src/database/session/updateSession";
+import { SESSION_COOKIE } from "config/constants";
+import { getSession } from "database/session/getSession";
+import { updateSession } from "database/session/updateSession";
 
 export function auth() {
   const middleware: RequestHandler = async (req, res, next) => {

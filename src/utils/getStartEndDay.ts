@@ -1,4 +1,4 @@
-import { IWorkTime } from "src/types/IWorkTime";
+import { IWorkTime } from "types/IWorkTime";
 
 export function getStartEndDay(date: string, workTime: IWorkTime) {
   const d = new Date(date);

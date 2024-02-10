@@ -1,4 +1,4 @@
-import { CLIENT_FIELDS } from "src/config/constants";
+import { CLIENT_FIELDS } from "config/constants";
 import { IClient } from "../IClient";
 import { isCarType } from "./isCarType";
 

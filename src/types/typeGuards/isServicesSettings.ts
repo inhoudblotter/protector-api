@@ -1,4 +1,4 @@
-import { RADEUS, SERVICES } from "src/config/constants";
+import { RADEUS, SERVICES } from "config/constants";
 import {
   IServiceDefaultSettings,
   IServiceMinMaxSettings,

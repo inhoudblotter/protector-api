@@ -1,4 +1,4 @@
-import { IDate } from "src/types/IDate";
+import { IDate } from "types/IDate";
 
 export function getStartEndExtendedMonth(date: IDate) {
   const d = new Date(date);

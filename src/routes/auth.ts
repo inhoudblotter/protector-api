@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { SESSION_COOKIE } from "src/config/constants";
-import { addUser } from "src/database/user/addUser";
-import { addSession } from "src/database/session/addSession";
-import { getUser } from "src/database/user/getUser";
-import { isUser } from "src/types/typeGuards/isUser";
-import { getHash } from "src/utils/getHash";
-import { auth } from "src/middlewares/auth";
-import { deleteSession } from "src/database/session/deleteSession";
-import { isToken as isTokenType } from "src/types/typeGuards/isToken";
-import { isToken } from "src/database/registerTokens/isToken";
-import { addToken } from "src/database/registerTokens/addToken";
+import { SESSION_COOKIE } from "config/constants";
+import { addUser } from "database/user/addUser";
+import { addSession } from "database/session/addSession";
+import { getUser } from "database/user/getUser";
+import { isUser } from "types/typeGuards/isUser";
+import { getHash } from "utils/getHash";
+import { auth } from "middlewares/auth";
+import { deleteSession } from "database/session/deleteSession";
+import { isToken as isTokenType } from "types/typeGuards/isToken";
+import { isToken } from "database/registerTokens/isToken";
+import { addToken } from "database/registerTokens/addToken";
 
 const router = Router();
 

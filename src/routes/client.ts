@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { updateClient } from "src/database/client/updateClient";
-import { auth } from "src/middlewares/auth";
-import { isClientUpdate } from "src/types/typeGuards/isClientUpdate";
+import { updateClient } from "database/client/updateClient";
+import { auth } from "middlewares/auth";
+import { isClientUpdate } from "types/typeGuards/isClientUpdate";
 
 const router = Router();
 

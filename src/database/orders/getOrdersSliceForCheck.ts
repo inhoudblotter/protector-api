@@ -1,7 +1,7 @@
 import { Client } from "pg";
-import { SERVICES } from "src/config/constants";
-import { IServices } from "src/types/IServices";
-import { IServicesSettings } from "src/types/IServicesSettings";
+import { SERVICES } from "config/constants";
+import { IServices } from "types/IServices";
+import { IServicesSettings } from "types/IServicesSettings";
 
 export async function getOrdersSliceForCheck(
   db: Client,

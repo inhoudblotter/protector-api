@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getSettings } from "src/database/settings/getSettings";
-import { updateSettings } from "src/database/settings/updateSettings";
-import { auth } from "src/middlewares/auth";
-import { isSettings } from "src/types/typeGuards/isSettings";
+import { getSettings } from "database/settings/getSettings";
+import { updateSettings } from "database/settings/updateSettings";
+import { auth } from "middlewares/auth";
+import { isSettings } from "types/typeGuards/isSettings";
 
 const router = Router();
 

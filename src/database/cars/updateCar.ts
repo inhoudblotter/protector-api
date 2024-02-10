@@ -1,5 +1,5 @@
 import { Client } from "pg";
-import { IClientUpdate } from "src/types/IClientUpdate";
+import { IClientUpdate } from "types/IClientUpdate";
 
 export async function updateCar(db: Client, client: IClientUpdate) {
   if (!client.carId || (!client.carType && !client.carNumber))

@@ -1,7 +1,7 @@
 import { Client } from "pg";
-import { SERVICES } from "src/config/constants";
-import { IDate } from "src/types/IDate";
-import { IStats } from "src/types/IStats";
+import { SERVICES } from "config/constants";
+import { IDate } from "types/IDate";
+import { IStats } from "types/IStats";
 
 export async function getOrderStats(db: Client, from: IDate, to: IDate) {
   const result: Partial<IStats> = {};
