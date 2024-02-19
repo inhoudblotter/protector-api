@@ -10,7 +10,12 @@ export function getStartEndDay(date: string, workTime: IWorkTime) {
     today = new Date();
     let m = today.getMinutes();
     m = Math.ceil(m / 15) * 15;
-    today.setMinutes(m);
+    if (
+      today.getHours() < workTime.from.hours ||
+      (today.getHours() === workTime.from.hours && m < workTime.from.minutes)
+    ) {
+      today.setHours(workTime.from.hours, workTime.from.minutes, 0, 0);
+    } else today.setMinutes(m, 0, 0);
     start = today.toISOString();
   } else {
     d.setHours(workTime.from.hours, workTime.from.minutes, 0, 0);

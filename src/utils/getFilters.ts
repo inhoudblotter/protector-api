@@ -1,4 +1,5 @@
 import { FILTERS, SERVICES } from "config/constants";
+import { IServicesSettings } from "types/IServicesSettings";
 
 export function getFilters(query: { [key: string]: any }) {
   const result: { [key: string]: any } = {};
@@ -9,7 +10,7 @@ export function getFilters(query: { [key: string]: any }) {
         const searchServices = query[k].split(",");
         if (searchServices.length) {
           searchServices.forEach((s: string) => {
-            const service = SERVICES.get(s);
+            const service = SERVICES.get(s as keyof IServicesSettings);
             if (service) services.push(service);
           });
         }

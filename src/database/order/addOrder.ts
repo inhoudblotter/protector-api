@@ -1,4 +1,4 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { IClient } from "types/IClient";
 import { ITimestamp } from "types/ITimestamp";
 import { IServices } from "types/IServices";
@@ -6,7 +6,7 @@ import { SERVICES } from "config/constants";
 import { IWheels } from "types/IWheels";
 
 export async function addOrder(
-  db: Client,
+  db: Pool,
   client: IClient,
   services: IServices,
   date: ITimestamp,
@@ -54,7 +54,7 @@ export async function addOrder(
     INSERT INTO orders (client_id, car_id, car_type, radius, quantity, lead_time, order_timestamp, completion_timestamp, ${services
       .map((s) => SERVICES.get(s))
       .join(", ")})
-    VALUES ($1, $2, $3, $4, $5, $6, $7, ${services
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, ${services
       .map(() => "TRUE")
       .join(", ")})
     RETURNING orders.id

@@ -1,10 +1,10 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { SERVICES } from "config/constants";
 import { IServices } from "types/IServices";
 import { IServicesSettings } from "types/IServicesSettings";
 
 export async function getOrdersSliceForCheck(
-  db: Client,
+  db: Pool,
   from: string,
   to: string,
   cut?: string

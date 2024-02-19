@@ -111,7 +111,7 @@ export function getFreeDays(
   const datePointer = roundDate(new Date(start));
   let timePointer = datePointer.getTime();
   const temp = roundDate(new Date(end));
-  const breakEnd = temp.getTime();
+  let breakEnd = today.getTime();
 
   const dates: {
     date: number;
@@ -121,7 +121,7 @@ export function getFreeDays(
   }[] = [];
   let ordersPointer = 0;
   // Даты до сегодняшнего дня не могут быть выбраны
-  while (timePointer < today.getTime()) {
+  while (timePointer < breakEnd) {
     dates.push({
       date: datePointer.getDate(),
       iso: datePointer.toISOString(),
@@ -132,6 +132,8 @@ export function getFreeDays(
     timePointer = datePointer.getTime();
   }
 
+  //TODO Добавить закрытый день, если дата равна сегодняшней и нет времени для записи
+
   // Обрезаем начало записей до сегодня
   while (
     orders.length > ordersPointer &&
@@ -140,7 +142,8 @@ export function getFreeDays(
     ++ordersPointer;
   }
 
-  while (timePointer < breakEnd) {
+  breakEnd = temp.getTime();
+  while (timePointer <= breakEnd) {
     // определяем конец отрезка в массиве с записями
     let ordersEnd = ordersPointer;
     while (

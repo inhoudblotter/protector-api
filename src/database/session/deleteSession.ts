@@ -1,6 +1,6 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 
-export async function deleteSession(db: Client, token: string) {
+export async function deleteSession(db: Pool, token: string) {
   const res = await db.query<{ id: string }>(
     `
     DELETE FROM sessions

@@ -1,15 +1,19 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { SERVICES } from "config/constants";
 import { ITimestamp } from "types/ITimestamp";
 import { IServices } from "types/IServices";
 import { IServicesSettings } from "types/IServicesSettings";
+import { IWheels } from "types/IWheels";
 
 export async function updateOrder(
-  db: Client,
+  db: Pool,
   id: number,
   services?: IServices,
   date?: ITimestamp,
-  price?: number
+  price?: number,
+  wheels?: IWheels,
+  completionTimestamp?: string,
+  leadTime?: number
 ) {
   const columns = [];
   const values = [];
@@ -39,6 +43,21 @@ export async function updateOrder(
     values.push(price);
   }
 
+  if (wheels) {
+    columns.push("quantity", "radius");
+    values.push(wheels.quantity, wheels.radius);
+  }
+
+  if (completionTimestamp) {
+    columns.push("completion_timestamp");
+    values.push(completionTimestamp);
+  }
+
+  if (leadTime) {
+    columns.push("lead_time");
+    values.push(leadTime);
+  }
+
   if (columns.length) {
     const res = await db.query<{ id: number }>(
       `
@@ -49,7 +68,8 @@ export async function updateOrder(
   `,
       [...values, id]
     );
-    if (!res.rows.length) throw new Error("NotFound");
+    if (!res.rows[0]) throw new Error("NotFound");
     return res.rows[0].id;
   }
+  throw new Error("NoData");
 }

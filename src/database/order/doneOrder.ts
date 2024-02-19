@@ -1,6 +1,6 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 
-export async function doneOrder(db: Client, id: number) {
+export async function doneOrder(db: Pool, id: number) {
   let res = await db.query(
     `
   DELETE FROM orders
@@ -10,7 +10,7 @@ export async function doneOrder(db: Client, id: number) {
     [id]
   );
   if (!res.rowCount) throw new Error("Not Found");
-  
+
   delete res.rows[0].id;
   if (!res.rows[0].order_timestamp) delete res.rows[0].order_timestamp;
 

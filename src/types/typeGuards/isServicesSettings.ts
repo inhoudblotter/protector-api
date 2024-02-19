@@ -80,7 +80,7 @@ export function isServicesSettings(obj: unknown): obj is IServicesSettings {
   const settings = obj as IServicesSettings;
 
   for (const key of Object.keys(settings)) {
-    if (!SERVICES.has(key)) return false;
+    if (!SERVICES.has(key as keyof IServicesSettings)) return false;
     if (!["storage", "addSpikes"].includes(key)) {
       if (
         !isServiceSettings<IServiceDefaultSettings>(

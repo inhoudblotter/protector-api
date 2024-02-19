@@ -1,4 +1,4 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { getRowsCount } from "../queries";
 import { IOrderResponse } from "types/IOrderResponse";
 import { IFilters } from "types/IFilters";
@@ -6,7 +6,7 @@ import { ISortSetting } from "types/ISortSettings";
 import { formatOrder } from "utils/formatOrder";
 
 export async function getOrders(
-  db: Client,
+  db: Pool,
   limit: number = 12,
   offset: number = 0,
   filters?: Partial<IFilters>,

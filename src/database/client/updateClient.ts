@@ -1,7 +1,7 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { IClientUpdate } from "types/IClientUpdate";
 
-export async function updateClient(db: Client, client: IClientUpdate) {
+export async function updateClient(db: Pool, client: IClientUpdate) {
   const res = await db.query<{ id: number }>(
     `
     UPDATE clients

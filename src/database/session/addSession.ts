@@ -1,8 +1,8 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { getToken } from "utils/getToken";
 
 export async function addSession(
-  db: Client,
+  db: Pool,
   userId: number,
   salt = Math.random() * 31321464
 ) {

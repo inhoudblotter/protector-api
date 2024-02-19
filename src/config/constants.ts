@@ -1,4 +1,6 @@
-export const SERVICES = new Map([
+import { IServicesSettings } from "types/IServicesSettings";
+
+export const SERVICES = new Map<keyof IServicesSettings, string>([
   ["complex", "complex"],
   ["dismantling", "dismantling"],
   ["instalation", "instalation"],

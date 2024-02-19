@@ -19,6 +19,7 @@ export function formatOrder(order: IOrderResponse) {
       carNumber: order.car_number,
       carType: order.car_type,
     },
+    lead_time: order.lead_time,
     date: order.order_timestamp,
     completion_timestamp: order.completion_timestamp,
     services,

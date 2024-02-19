@@ -1,7 +1,7 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { ISettings } from "types/ISettings";
 
-export async function updateSettings(db: Client, settings: Partial<ISettings>) {
+export async function updateSettings(db: Pool, settings: Partial<ISettings>) {
   if (settings.phone) {
     const res = await db.query(
       `

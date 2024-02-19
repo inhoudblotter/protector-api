@@ -1,7 +1,7 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { IClientUpdate } from "types/IClientUpdate";
 
-export async function updateCar(db: Client, client: IClientUpdate) {
+export async function updateCar(db: Pool, client: IClientUpdate) {
   if (!client.carId || (!client.carType && !client.carNumber))
     throw new Error("No data");
   const columns = [];

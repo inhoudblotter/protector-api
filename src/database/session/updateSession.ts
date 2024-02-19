@@ -1,8 +1,8 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { getToken } from "utils/getToken";
 
 export async function updateSession(
-  db: Client,
+  db: Pool,
   userId: number,
   token: string,
   salt = Math.random() * 31321464
@@ -11,7 +11,7 @@ export async function updateSession(
   const res = await db.query<{ id: string }>(
     `
   UPDATE sessions
-  SET id=$1, creation_timestamp=$2
+  SET id=$1, last_update=$2
   WHERE user_id=$3 AND id=$4
   RETURNING id;
   `,

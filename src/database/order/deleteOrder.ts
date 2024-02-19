@@ -1,6 +1,6 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 
-export async function deleteOrder(db: Client, id: number) {
+export async function deleteOrder(db: Pool, id: number) {
   const res = await db.query<{ id: number }>(
     `
   DELETE FROM orders

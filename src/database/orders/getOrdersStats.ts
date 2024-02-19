@@ -1,9 +1,9 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { SERVICES } from "config/constants";
 import { IDate } from "types/IDate";
 import { IStats } from "types/IStats";
 
-export async function getOrderStats(db: Client, from: IDate, to: IDate) {
+export async function getOrderStats(db: Pool, from: IDate, to: IDate) {
   const result: Partial<IStats> = {};
   const columns = [
     "COUNT(id) as number_of_completed_orders",

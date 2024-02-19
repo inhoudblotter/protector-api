@@ -14,6 +14,9 @@ import { isOrderUpdate } from "types/typeGuards/isOrderUpdate";
 import { checkCorrectOrderInsert } from "utils/checkCorrectOrderInsert";
 import { getCompletionTimestamp } from "utils/getCompletionTimestamp";
 import { getLeadTime } from "utils/getLeadTime";
+import { IServices } from "types/IServices";
+import { ISettings } from "types/ISettings";
+import { IOrder } from "types/IOrder";
 
 const router = Router();
 
@@ -82,7 +85,7 @@ router.get("/:id", auth(), async (req, res) => {
   if (isNaN(id))
     return res.status(400).json({
       code: 400,
-      message: "ID must be a number",
+      message: "ID должно быть числом",
     });
 
   try {
@@ -92,13 +95,13 @@ router.get("/:id", auth(), async (req, res) => {
     if (error instanceof Error && error.message === "Not found") {
       return res.status(404).json({
         code: 404,
-        message: "Order not found",
+        message: "Заявка не найдена",
       });
     }
     console.error(error);
     return res.status(500).json({
       code: 500,
-      message: "Failed to load order",
+      message: "Ошибка загрузки заявки",
     });
   }
 });
@@ -106,7 +109,7 @@ router.get("/:id", auth(), async (req, res) => {
 router.patch("/:id", auth(), async (req, res) => {
   const id = Number(req.params.id);
   if (isOrderUpdate(req.body) && !isNaN(id)) {
-    const { services, date, client, price } = req.body;
+    const { services, date, client, price, wheels } = req.body;
     try {
       let clientId: number | undefined = undefined;
       let carId: number | undefined = undefined;
@@ -116,31 +119,130 @@ router.patch("/:id", auth(), async (req, res) => {
           carId = await updateCar(req.db, client);
         }
       }
+      let leadTime: number | undefined = undefined;
+      let completionTimestamp: string | undefined = undefined;
+      let settings: ISettings | undefined = undefined;
+      let updatedDate: string | undefined = undefined;
+      let oldOrder: IOrder | undefined = undefined;
+      if (services || date || wheels) {
+        settings = await getSettings(req.db);
+        oldOrder = await getOrder(req.db, id);
+        updatedDate = date || oldOrder.date;
+        let updatedServices: IServices = services || oldOrder.services;
+        let updatedWheels = wheels || oldOrder.wheels;
+        leadTime = getLeadTime(
+          updatedServices,
+          updatedWheels.quantity,
+          settings.services
+        );
+        completionTimestamp = date
+          ? getCompletionTimestamp(date, leadTime)
+          : oldOrder.completion_timestamp;
+      }
+      await updateOrder(
+        req.db,
+        id,
+        services,
+        date,
+        price,
+        wheels,
+        completionTimestamp,
+        leadTime
+      );
 
-      const orderId = await updateOrder(req.db, id, services, date, price);
-      if (!orderId) throw new Error("Failed to update order.");
+      if (updatedDate && settings && completionTimestamp && oldOrder) {
+        const dayStart = new Date(updatedDate);
+        dayStart.setHours(
+          settings.work_time.from.hours,
+          settings.work_time.from.minutes,
+          0,
+          0
+        );
+        const orders = await getOrdersSliceForCheck(
+          req.db,
+          dayStart.toISOString(),
+          completionTimestamp,
+          date
+        );
+        const passed = checkCorrectOrderInsert(
+          orders,
+          updatedDate,
+          settings.services
+        );
+        if (!passed) {
+          await updateOrder(
+            req.db,
+            id,
+            oldOrder.services,
+            oldOrder.date,
+            oldOrder.price,
+            oldOrder.wheels,
+            oldOrder.completion_timestamp,
+            oldOrder.lead_time
+          );
+          const dayStart = new Date(oldOrder.date);
+          dayStart.setHours(
+            settings.work_time.from.hours,
+            settings.work_time.from.minutes,
+            0,
+            0
+          );
+          const orders = await getOrdersSliceForCheck(
+            req.db,
+            dayStart.toISOString(),
+            oldOrder.completion_timestamp,
+            oldOrder.date
+          );
+          const passed = checkCorrectOrderInsert(
+            orders,
+            oldOrder.date,
+            settings.services
+          );
+          if (!passed) {
+            res.status(406).json({
+              code: 4060,
+              message:
+                "Пока меняли данные кто-то уже успел записаться на прежнее время. Создайте новую запись.",
+            });
+            return await deleteOrder(req.db, id);
+          } else {
+            return res.status(406).json({
+              code: 406,
+              message:
+                "С такими условиями вы не можете выбрать это время. Попробуйте выбрать другое.",
+            });
+          }
+        }
+      }
       return res.status(200).json({
-        id: orderId,
+        id,
         clientId,
         carId,
       });
     } catch (error) {
-      if (error instanceof Error && error.message === "NotFound") {
-        return res.status(404).json({
-          code: 404,
-          message: "Order not found.",
-        });
+      if (error instanceof Error) {
+        if (error.message === "NotFound") {
+          return res.status(404).json({
+            code: 404,
+            message: "Заявка не найдена.",
+          });
+        } else if (error.message === "NoData") {
+          return res.status(400).json({
+            code: 400,
+            message: "Не переданы данные для обновления заявки.",
+          });
+        }
       }
       console.error(error);
       return res.status(500).json({
         code: 500,
-        message: "Failed to update order.",
+        message: "Ошибка при обновлении заявки.",
       });
     }
   }
   return res.status(400).json({
     code: 400,
-    message: "The request contains incorrect order information",
+    message: "Запрос содержит некорректную информацию",
   });
 });
 
@@ -156,13 +258,13 @@ router.delete("/:id", auth(), async (req, res) => {
       if (error instanceof Error && error.message === "Not Found") {
         return res.status(404).json({
           code: 404,
-          message: "Order not found",
+          message: "Заявка не найдена.",
         });
       } else {
         console.error(error);
         return res.status(500).json({
           code: 500,
-          message: "Internal error",
+          message: "Ошибка при удалении заявки",
         });
       }
     }

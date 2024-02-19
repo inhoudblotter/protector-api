@@ -6,6 +6,7 @@ export interface IOrderResponse {
   quantity: number;
   car_type?: "passengerCar" | "suv";
   order_timestamp: string;
+  lead_time: number;
   complex: boolean;
   dismantling: boolean;
   instalation: boolean;

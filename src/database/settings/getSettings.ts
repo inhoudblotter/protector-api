@@ -1,7 +1,7 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { ISettings } from "types/ISettings";
 
-export async function getSettings(db: Client): Promise<ISettings> {
+export async function getSettings(db: Pool): Promise<ISettings> {
   const settings: Partial<ISettings> = {};
   const res = await db.query<{ title: string; setting_value: any }>(`
   SELECT title, setting_value FROM settings;

@@ -1,8 +1,8 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { IOrderResponse } from "types/IOrderResponse";
 import { formatOrder } from "utils/formatOrder";
 
-export async function getOrder(db: Client, id: number) {
+export async function getOrder(db: Pool, id: number) {
   const res = await db.query<IOrderResponse>(
     `
     SELECT o.id as order_id, clients.id as client_id, * FROM (

@@ -8,6 +8,7 @@ export interface IOrder {
   client: IClient;
   date: ITimestamp;
   completion_timestamp: ITimestamp;
+  lead_time: number;
   wheels: IWheels;
   price?: number;
 }

@@ -1,7 +1,7 @@
-import { Client } from "pg";
+import { Pool } from "pg";
 import { getToken } from "utils/getToken";
 
-export async function addToken(db: Client, salt = Math.random() * 31321464) {
+export async function addToken(db: Pool, salt = Math.random() * 31321464) {
   const token = getToken(new Date().getTime().toString(32), salt);
   const res = await db.query<{ token: number }>(
     `

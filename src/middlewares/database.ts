@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
-import { Client } from "pg";
+import { Pool } from "pg";
 
-export function database(client: Client) {
+export function database(client: Pool) {
   const middleware: RequestHandler = (req, _, next) => {
     req.db = client;
     next();
