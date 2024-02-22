@@ -22,6 +22,5 @@ export function getStartEndExtendedMonth(date: IDate) {
     } else temp.setDate(temp.getDate());
   } else temp.setDate(temp.getDate() + 6);
   const end = temp.toISOString();
-  console.log(start, end);
   return { start, end };
 }
