@@ -31,7 +31,10 @@ async function main() {
 
   app.use(
     cors({
-      origin: ["http://localhost:5173"],
+      origin: [
+        process.env.ADMIN_HOST || "http://localhost:5173",
+        process.env.CLIENT_HOST || "http://localhost:5174",
+      ],
       credentials: true,
     })
   );
