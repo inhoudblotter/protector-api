@@ -10,8 +10,7 @@ RUN apk add --no-cache tzdata && \
 
 ENV TZ="Asia/Yekaterinburg"
 
-RUN npm config set registry http://registry.npmjs.org/ --global && \
-  npm i -g npm@latest && npm i && \
+RUN npm i && \
   npm run build && npm prune --production
 
 ENV NODE_PATH=dist/
