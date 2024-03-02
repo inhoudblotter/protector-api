@@ -20,7 +20,7 @@ import { IOrder } from "types/IOrder";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   if (isNewOrder(req.body)) {
     const { services, client, date, wheels } = req.body;
     try {
@@ -67,11 +67,11 @@ router.post("/", async (req, res) => {
           id: orderID,
         });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({
+      res.status(500).json({
         code: 500,
         message: "Что-то пошло не так...",
       });
+      return next(error);
     }
   }
   return res.status(400).json({
@@ -80,7 +80,7 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.get("/:id", auth(), async (req, res) => {
+router.get("/:id", auth(), async (req, res, next) => {
   const id = Number(req.params.id);
   if (isNaN(id))
     return res.status(400).json({
@@ -98,15 +98,15 @@ router.get("/:id", auth(), async (req, res) => {
         message: "Заявка не найдена",
       });
     }
-    console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       code: 500,
       message: "Ошибка загрузки заявки",
     });
+    next(error);
   }
 });
 
-router.patch("/:id", auth(), async (req, res) => {
+router.patch("/:id", auth(), async (req, res, next) => {
   const id = Number(req.params.id);
   if (isOrderUpdate(req.body) && !isNaN(id)) {
     const { services, date, client, price, wheels } = req.body;
@@ -147,7 +147,8 @@ router.patch("/:id", auth(), async (req, res) => {
         price,
         wheels,
         completionTimestamp,
-        leadTime
+        leadTime,
+        client?.carType
       );
 
       if (updatedDate && settings && completionTimestamp && oldOrder) {
@@ -178,7 +179,8 @@ router.patch("/:id", auth(), async (req, res) => {
             oldOrder.price,
             oldOrder.wheels,
             oldOrder.completion_timestamp,
-            oldOrder.lead_time
+            oldOrder.lead_time,
+            oldOrder.client.carType
           );
           const dayStart = new Date(oldOrder.date);
           dayStart.setHours(
@@ -233,11 +235,11 @@ router.patch("/:id", auth(), async (req, res) => {
           });
         }
       }
-      console.error(error);
-      return res.status(500).json({
+      res.status(500).json({
         code: 500,
         message: "Ошибка при обновлении заявки.",
       });
+      return next(error);
     }
   }
   return res.status(400).json({
@@ -246,7 +248,7 @@ router.patch("/:id", auth(), async (req, res) => {
   });
 });
 
-router.delete("/:id", auth(), async (req, res) => {
+router.delete("/:id", auth(), async (req, res, next) => {
   const id = Number(req.params.id);
   if (!isNaN(id)) {
     try {
@@ -261,21 +263,21 @@ router.delete("/:id", auth(), async (req, res) => {
           message: "Заявка не найдена.",
         });
       } else {
-        console.error(error);
-        return res.status(500).json({
+        res.status(500).json({
           code: 500,
           message: "Ошибка при удалении заявки",
         });
+        return next(error);
       }
     }
   }
   return res.status(400).json({
     code: 400,
-    message: "The request contains incorrect order information",
+    message: "Запрос содержит некорректную информацию.",
   });
 });
 
-router.patch("/:id/done", auth(), async (req, res) => {
+router.patch("/:id/done", auth(), async (req, res, next) => {
   const id = Number(req.params.id);
 
   if (!isNaN(id)) {
@@ -288,20 +290,20 @@ router.patch("/:id/done", auth(), async (req, res) => {
       if (error instanceof Error && error.message === "Not Found") {
         return res.status(404).json({
           code: 404,
-          message: "Order not found",
+          message: "Заказ не найден.",
         });
       } else {
-        console.error(error);
-        return res.status(500).json({
+        res.status(500).json({
           code: 500,
-          message: "Internal error",
+          message: "Ошибка при обновлении заказа.",
         });
+        return next(error);
       }
     }
   }
   return res.status(400).json({
     code: 400,
-    message: "The request contains incorrect order information",
+    message: "Запрос содержит некорректную информацию.",
   });
 });
 

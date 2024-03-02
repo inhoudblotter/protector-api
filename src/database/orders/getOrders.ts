@@ -22,14 +22,16 @@ export async function getOrders(
 
   const values: (string | number)[] = [];
   if (filters && Object.keys(filters).length) {
-    let servicesFilter = "";
+    let orderFilters = "";
+    let temp = [];
     if (filters.services) {
-      servicesFilter = `WHERE ${filters.services
-        .map((el) => `${el}=TRUE`)
-        .join(" OR ")}`;
+      temp.push(filters.services.map((el) => `${el}=TRUE`).join(" OR "));
     }
+
+    if (temp.length) orderFilters = `WHERE ${temp.join(" AND ")}`;
+
     let clientsFilter = "";
-    const temp = [];
+    temp = [];
 
     if (filters.username) {
       values.push(`%${filters.username.toLocaleLowerCase()}%`);
@@ -39,17 +41,19 @@ export async function getOrders(
       values.push(`%${filters.phone.toLocaleLowerCase()}%`);
       temp.push(`LOWER(clients.phone) LIKE $${values.length}`);
     }
-    if (filters.carNumber) {
-      values.push(`%${filters.carNumber.toLocaleLowerCase()}%`);
+
+    if (filters.car_number) {
+      values.push(`%${filters.car_number.toLocaleLowerCase()}%`);
       temp.push(`LOWER(cars.car_number) LIKE $${values.length}`);
     }
+
     if (temp.length) clientsFilter = `WHERE ${temp.join(" AND ")}`;
 
     res = await db.query(
       `
     SELECT o.id as order_id, clients.id as client_id, * FROM (
       SELECT * FROM ${table}
-      ${servicesFilter}
+      ${orderFilters}
       ORDER BY ${column} ${direction}
     ) o
     LEFT JOIN clients ON o.client_id = clients.id
@@ -63,7 +67,7 @@ export async function getOrders(
     totalCount = await db.query(
       `
     SELECT COUNT(*) as total_count FROM ${
-      servicesFilter ? `(SELECT * FROM ${table} ${servicesFilter})` : table
+      orderFilters ? `(SELECT * FROM ${table} ${orderFilters})` : table
     } o
     ${
       clientsFilter

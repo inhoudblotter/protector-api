@@ -29,13 +29,13 @@ router.get("/", auth(), async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       code: 500,
-      message: "Failed to load orders",
+      message: "Ошибка при загрузки заявок.",
     });
     return next(error);
   }
 });
 
-router.get("/old", auth(), async (req, res) => {
+router.get("/old", auth(), async (req, res, next) => {
   try {
     const limit = Number(req.query.limit) || 15;
     const offset = Number(req.query.offset) || 0;
@@ -54,11 +54,11 @@ router.get("/old", auth(), async (req, res) => {
     );
     return res.status(200).json(data);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       code: 500,
-      message: "Failed to load orders",
+      message: "Ошибка при загруке заявок.",
     });
+    return next(error);
   }
 });
 
@@ -73,7 +73,7 @@ router.get("/stats", auth(), async (req, res, next) => {
         code: 500,
         message: "Ошибка при получении статистики.",
       });
-      next(error);
+      return next(error);
     }
   } else
     return res.status(400).json({

@@ -24,6 +24,7 @@ export const CLIENT_FIELDS = new Map([
 export const CAR_TYPES = new Map([
   ["passengerCar", true],
   ["suv", true],
+  ["crossover", true],
 ]);
 
 export const SESSION_COOKIE = {

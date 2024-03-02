@@ -21,7 +21,7 @@ export function getFreeTime(
 
   const temp = new Date(timePointer);
   temp.setHours(workTime.to.hours, workTime.to.minutes);
-  const breakEnd = temp.getTime() - leadTime * 60 * 1000;
+  const breakEnd = temp.getTime();
 
   if (timePointer.getTime() === today.getTime()) {
     today = new Date();
@@ -51,7 +51,6 @@ export function getFreeTime(
   let atWork: { completion_time: number; maxCars: number }[] = [];
   const hoursPointer = { index: -1, hours: Infinity };
   // Двигаем указатель пока не достигнем конца рабочего дня (с учётом времени выполнения заказа)
-
   while (timePointer.getTime() <= breakEnd) {
     // Очищаем машины, которые завершили выполнение заказа
     const atWorkLength = atWork.length;
@@ -67,10 +66,7 @@ export function getFreeTime(
         );
       } else maxCars = Infinity;
     }
-    // Если машин в работа меньше чем максимальное количество машин, то добавляем 15 минут к свободному времени
-    if (atWork.length < maxCars) freeTime += 15;
     // Пока время выполнения совпадает со временем указателя идем по массиву записей
-
     while (timePointer.getTime() === orderDate) {
       // Берём максимальное количество машин для выбранных в записи услуг
       const mc = getMaxCars(order.services, servicesSettings);
@@ -93,17 +89,22 @@ export function getFreeTime(
       } else orderDate = Infinity;
     }
     // Если в гараже ещё остались места и свободное время больше или равно времени выполнения заказа,
-    // то это означает, что в этот день можно записаться
+    // то это означает, что в это время можно записаться
     if (atWork.length < maxCars && freeTime >= leadTime) {
       if (timePointer.getHours() !== hoursPointer.hours) {
         times.push([]);
         ++hoursPointer.index;
         hoursPointer.hours = timePointer.getHours();
       }
-      times[hoursPointer.index].push(timePointer.toISOString());
+      const date = new Date(timePointer);
+      date.setMinutes(date.getMinutes() - freeTime);
+      times[hoursPointer.index].push(date.toISOString());
+      freeTime -= 15;
     }
-    // Если нет, то двигаемся дальше
+    // Двигаемся дальше
     timePointer.setMinutes(timePointer.getMinutes() + 15);
+    // Если машин в работе меньше чем максимальное количество машин, то добавляем 15 минут к свободному времени
+    if (atWork.length < maxCars) freeTime += 15;
   }
   return times;
 }

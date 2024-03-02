@@ -13,14 +13,26 @@ const router = Router();
 
 router.get("/month/:date", async (req, res, next) => {
   const date = req.params.date;
-  let { services, wheels } = req.query;
+  let { services, wheels, skip } = req.query;
   services = typeof services === "string" ? services.split(",") : undefined;
   const quantityWheels = Number(wheels);
-  if (isDate(date) && isServices(services) && !isNaN(quantityWheels)) {
+  const skipOrder = Number(skip);
+  if (
+    isDate(date) &&
+    isServices(services) &&
+    !isNaN(quantityWheels) &&
+    (!skip || !isNaN(skipOrder))
+  ) {
     try {
       const settings = await getSettings(req.db);
       const { start, end } = getStartEndExtendedMonth(date);
-      const orders = await getOrdersSliceForCheck(req.db, start, end);
+      const orders = await getOrdersSliceForCheck(
+        req.db,
+        start,
+        end,
+        undefined,
+        skipOrder
+      );
       const leadTime = getLeadTime(services, quantityWheels, settings.services);
       const days = getFreeDays(
         start,
@@ -48,14 +60,26 @@ router.get("/month/:date", async (req, res, next) => {
 
 router.get("/day/:date", async (req, res, next) => {
   const date = req.params.date;
-  let { services, wheels } = req.query;
+  let { services, wheels, skip } = req.query;
+  const skipOrder = Number(skip);
   services = typeof services === "string" ? services.split(",") : undefined;
   const quantityWheels = Number(wheels);
-  if (isDate(date) && isServices(services) && !isNaN(quantityWheels)) {
+  if (
+    isDate(date) &&
+    isServices(services) &&
+    !isNaN(quantityWheels) &&
+    (!skip || !isNaN(skipOrder))
+  ) {
     try {
       const settings = await getSettings(req.db);
       const { start, end } = getStartEndDay(date, settings.work_time);
-      const orders = await getOrdersSliceForCheck(req.db, start, end);
+      const orders = await getOrdersSliceForCheck(
+        req.db,
+        start,
+        end,
+        undefined,
+        skipOrder
+      );
       const leadTime = getLeadTime(services, quantityWheels, settings.services);
       const freeTime = getFreeTime(
         date,

@@ -1,7 +1,9 @@
+import "dotenv/config";
 import { RequestHandler } from "express";
 import { SESSION_COOKIE } from "config/constants";
 import { getSession } from "database/session/getSession";
 import { updateSession } from "database/session/updateSession";
+import { botSendMessage } from "utils/botSendMessage";
 
 export function auth() {
   const middleware: RequestHandler = async (req, res, next) => {
@@ -32,8 +34,11 @@ export function auth() {
             code: 401,
             message: "Вы не авторизованы",
           });
-        console.error(error);
-        res.status(500).json({
+        botSendMessage(
+          Number(process.env.ADMIN_CHAT),
+          `Ошибка при аутентификации.\n${JSON.stringify(error)}`
+        );
+        return res.status(500).json({
           code: 500,
           message: "Ошибка аутентификации",
         });

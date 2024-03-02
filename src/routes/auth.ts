@@ -24,20 +24,20 @@ router.get("/", auth(), async (req, res) => {
   });
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res, next) => {
   if (isUser(req.body)) {
     try {
       const user = await getUser(req.db, req.body);
       if (!user)
         return res.status(404).json({
           code: 404,
-          message: "User not found",
+          message: "Пользователь не найден.",
         });
 
       if (user.pass !== getHash(req.body.password))
         return res.status(401).json({
           code: 401,
-          message: "Incorrect password",
+          message: "Неверный пароль.",
         });
 
       const token = await addSession(req.db, user.id);
@@ -47,17 +47,19 @@ router.post("/login", async (req, res) => {
         id: user.id,
       });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ code: 500, message: "Login failed" });
+      res
+        .status(500)
+        .json({ code: 500, message: "При авторизации возникла ошибка." });
+      return next(error);
     }
   }
   return res.status(500).json({
     code: 500,
-    message: "The request body contains incorrect user information",
+    message: "Отправлены некорректные данные.",
   });
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res, next) => {
   const registerToken = req.query.token;
   if (isUser(req.body) && isTokenType(registerToken)) {
     try {
@@ -65,13 +67,13 @@ router.post("/register", async (req, res) => {
       if (!passedToken)
         return res.status(401).json({
           code: 401,
-          message: "Токен регистрации не найден",
+          message: "Токен регистрации не найден.",
         });
       const id = await addUser(req.db, req.body);
       if (!id)
         return res.status(422).json({
           code: 422,
-          message: "A user whit the same name already exists",
+          message: "Такой пользователь уже существует.",
         });
 
       const token = await addSession(req.db, id);
@@ -81,16 +83,16 @@ router.post("/register", async (req, res) => {
         id,
       });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({
+      res.status(500).json({
         code: 500,
-        message: "Failed to create user.",
+        message: "Ошибка при создании нового пользователя.",
       });
+      return next(error);
     }
   }
   return res.status(400).json({
     code: 400,
-    message: "The request body contains incorrect order information",
+    message: "Некорректная информация о пользователе.",
   });
 });
 
@@ -108,8 +110,6 @@ router.get("/register/new", auth(), async (req, res, next) => {
     return next(error);
   }
 });
-
-// http://localhost:5173/register?token=bb54068aea85faa7e487530083366be9962390af822e4c71ef1aca7033c83e66
 
 router.get("/register/:token", async (req, res, next) => {
   const token = req.params.token;

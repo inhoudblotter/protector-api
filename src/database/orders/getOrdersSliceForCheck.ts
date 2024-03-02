@@ -7,7 +7,8 @@ export async function getOrdersSliceForCheck(
   db: Pool,
   from: string,
   to: string,
-  cut?: string
+  cut?: string,
+  skip?: number
 ): Promise<
   {
     date: string;
@@ -15,8 +16,16 @@ export async function getOrdersSliceForCheck(
     completion_timestamp: string;
   }[]
 > {
-  const values = [from, to];
-  if (cut) values.push(cut);
+  const values: (string | number)[] = [from, to];
+  const searchQueries = ["order_timestamp >= $1 and order_timestamp <= $2"];
+  if (cut) {
+    values.push(cut);
+    searchQueries.push(`completion_timestamp >= $${values.length}`);
+  }
+  if (skip) {
+    values.push(skip);
+    searchQueries.push(`id != $${values.length}`);
+  }
   const res = await db.query<{
     order_timestamp: string;
     completion_timestamp: string;
@@ -34,9 +43,7 @@ export async function getOrdersSliceForCheck(
     SELECT order_timestamp, completion_timestamp, ${[...SERVICES.values()].join(
       ", "
     )} FROM orders
-    WHERE order_timestamp >= $1 and order_timestamp <= $2 ${
-      cut ? "and completion_timestamp >= $3" : ""
-    }
+    WHERE ${searchQueries.join(" and ")}
     ORDER BY order_timestamp asc
   `,
     values

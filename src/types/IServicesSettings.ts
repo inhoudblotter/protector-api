@@ -2,8 +2,7 @@ export interface IServiceDefaultSettings {
   leadTime: number;
   maxCars: number;
   prices: {
-    suv: { [radius: number]: number };
-    passengerCar: { [radius: number]: number };
+    [key in "suv" | "crossover" | "passengerCar"]: { [radius: number]: number };
   };
 }
 
@@ -11,8 +10,9 @@ export interface IServiceMinMaxSettings {
   leadTime: number;
   maxCars: number;
   prices: {
-    suv: { [radius: number]: { min: number; max: number } };
-    passengerCar: { [radius: number]: { min: number; max: number } };
+    [key in "suv" | "crossover" | "passengerCar"]: {
+      [radius: number]: { min: number; max: number };
+    };
   };
 }
 

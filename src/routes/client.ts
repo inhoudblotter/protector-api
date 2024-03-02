@@ -5,12 +5,11 @@ import { isClientUpdate } from "types/typeGuards/isClientUpdate";
 
 const router = Router();
 
-router.patch("/:id", auth(), async (req, res) => {
+router.patch("/:id", auth(), async (req, res, next) => {
   const id = Number(req.params.id);
   if (isClientUpdate(req.body) && !isNaN(id)) {
     try {
       const clientId = await updateClient(req.db, req.body);
-      if (!clientId) throw new Error("Failed to update client.");
       return res.status(200).json({
         id: clientId,
       });
@@ -18,19 +17,19 @@ router.patch("/:id", auth(), async (req, res) => {
       if (error instanceof Error && error.message === "NotFound") {
         return res.status(404).json({
           code: 404,
-          message: "Client not found.",
+          message: "Клиент не найден.",
         });
       }
-      console.error(error);
-      return res.status(500).json({
+      res.status(500).json({
         code: 500,
-        message: "Failed to update client.",
+        message: "Ошибка при обновлении клиента.",
       });
+      return next(error);
     }
   }
   return res.status(400).json({
     code: 400,
-    message: "The request contains incorrect client information.",
+    message: "Запрос содержит некорректную информацию.",
   });
 });
 

@@ -19,7 +19,7 @@ function hasFreeTime(
 
   let temp = new Date(date);
   temp.setHours(workTime.to.hours, workTime.to.minutes, 0, 0);
-  const breakEnd = temp.getTime() - leadTime * 60 * 1000;
+  const breakEnd = temp.getTime();
 
   temp = new Date();
   let m = temp.getMinutes();
@@ -61,8 +61,6 @@ function hasFreeTime(
         );
       } else maxCars = Infinity;
     }
-    // Если машин в работа меньше чем максимальное количество машин, то добавляем 15 минут к свободному времени
-    if (atWork.length < maxCars) freeTime += 15;
     // Пока время выполнения совпадает со временем указателя идем по массиву записей
     while (datePointer.getTime() === orderDate) {
       // Берём максимальное количество машин для выбранных в записи услуг
@@ -76,9 +74,7 @@ function hasFreeTime(
         maxCars: mc,
       });
       // Если все места заняты, то устанавливаем счётчик свободного времени на 0
-      if (atWork.length >= maxCars) {
-        freeTime = 0;
-      }
+      if (atWork.length >= maxCars) freeTime = 0;
       // Двигаем записи дальше вместе с указателем
       if (ordersPointer < orders.length - 1) {
         order = orders[++ordersPointer];
@@ -90,6 +86,8 @@ function hasFreeTime(
     if (atWork.length < maxCars && freeTime >= leadTime) return true;
     // Если нет, то двигаемся дальше
     datePointer.setMinutes(datePointer.getMinutes() + 15);
+    // Если машин в работа меньше чем максимальное количество машин, то добавляем 15 минут к свободному времени
+    if (atWork.length < maxCars) freeTime += 15;
   }
   return false;
 }

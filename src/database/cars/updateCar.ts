@@ -6,10 +6,6 @@ export async function updateCar(db: Pool, client: IClientUpdate) {
     throw new Error("No data");
   const columns = [];
   const values = [];
-  if (client.carType) {
-    columns.push("car_type");
-    values.push(client.carType);
-  }
   if (client.carNumber) {
     columns.push("car_number");
     values.push(client.carNumber);

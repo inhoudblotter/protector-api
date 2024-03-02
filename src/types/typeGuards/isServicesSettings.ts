@@ -62,14 +62,20 @@ export function isServiceSettings<T>(
   const { maxCars, leadTime, prices } = obj as IServiceDefaultSettings;
   if (typeof maxCars !== "number" || typeof leadTime !== "number") return false;
 
-  if (!prices || typeof prices !== "object" || Object.keys(prices).length !== 2)
+  if (!prices || typeof prices !== "object" || Object.keys(prices).length !== 3)
     return false;
 
-  const { suv, passengerCar } = prices;
+  const { suv, passengerCar, crossover } = prices;
   if (type === "default") {
-    if (!isPrices(suv) || !isPrices(passengerCar)) return false;
+    if (!isPrices(suv) || !isPrices(passengerCar) || !isPrices(crossover))
+      return false;
   } else if (type === "min-max") {
-    if (!isMinMaxPrices(suv) || !isMinMaxPrices(passengerCar)) return false;
+    if (
+      !isMinMaxPrices(suv) ||
+      !isMinMaxPrices(passengerCar) ||
+      !isMinMaxPrices(crossover)
+    )
+      return false;
   }
 
   return true;
@@ -88,8 +94,7 @@ export function isServicesSettings(obj: unknown): obj is IServicesSettings {
         )
       )
         return false;
-    }
-    if (["addSpikes"].includes(key)) {
+    } else if (["addSpikes"].includes(key)) {
       if (
         !isServiceSettings<IServiceMinMaxSettings>(
           settings[key as keyof typeof settings],
@@ -97,8 +102,7 @@ export function isServicesSettings(obj: unknown): obj is IServicesSettings {
         )
       )
         return false;
-    }
-    if (["storage"].includes(key)) {
+    } else if (["storage"].includes(key)) {
       const service = settings[key as keyof typeof settings];
       if (
         !service ||

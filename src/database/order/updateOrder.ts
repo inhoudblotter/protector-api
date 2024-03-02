@@ -13,7 +13,8 @@ export async function updateOrder(
   price?: number,
   wheels?: IWheels,
   completionTimestamp?: string,
-  leadTime?: number
+  leadTime?: number,
+  carType?: string
 ) {
   const columns = [];
   const values = [];
@@ -56,6 +57,11 @@ export async function updateOrder(
   if (leadTime) {
     columns.push("lead_time");
     values.push(leadTime);
+  }
+
+  if (carType) {
+    columns.push("car_type");
+    values.push(carType);
   }
 
   if (columns.length) {

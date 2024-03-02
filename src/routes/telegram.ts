@@ -13,7 +13,9 @@ router.post(`/${process.env.TELEGRAM_KEY}`, async (req, _, next) => {
   const chat_id = Number(message.from.chat.id);
   const token = message.text;
   if (typeof username !== "string" || isNaN(chat_id)) {
-    return next(new Error(`Unknown telegram scheme:\n ${req.body}`));
+    return next(
+      new Error(`Unknown telegram scheme:\n ${JSON.stringify(req.body)}`)
+    );
   }
   if (isToken(token)) {
     const passed = await isRegisterToken(req.db, token);
