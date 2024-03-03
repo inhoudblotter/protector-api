@@ -83,6 +83,7 @@ router.post("/", async (req, res, next) => {
       subscribers.forEach((subscriber) =>
         botSendMessage(subscriber.chat_id, message)
       );
+      return;
     } catch (error) {
       res.status(500).json({
         code: 500,
