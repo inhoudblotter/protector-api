@@ -12,6 +12,18 @@ export const SERVICES = new Map<keyof IServicesSettings, string>([
   ["puncture", "puncture"],
 ]);
 
+export const SERVICES_NAMES = new Map([
+  ["complex", "комплекс"],
+  ["dismantling", "демонтаж"],
+  ["instalation", "монтаж"],
+  ["balancing", "балансировка"],
+  ["removalAndInstalation", "снятие и установка"],
+  ["storage", "хранение"],
+  ["addSpikes", "дошиповка"],
+  ["cut", "ремонт пореза"],
+  ["puncture", "ремонт прокола"],
+]);
+
 export const CLIENT_FIELDS = new Map([
   ["id", "id"],
   ["name", "username"],

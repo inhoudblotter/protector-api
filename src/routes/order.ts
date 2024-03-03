@@ -17,6 +17,9 @@ import { getLeadTime } from "utils/getLeadTime";
 import { IServices } from "types/IServices";
 import { ISettings } from "types/ISettings";
 import { IOrder } from "types/IOrder";
+import { botSendMessage } from "utils/botSendMessage";
+import { getSubscribers } from "database/subscribersTelegram/getSubscribers";
+import { SERVICES_NAMES } from "config/constants";
 
 const router = Router();
 
@@ -63,9 +66,23 @@ router.post("/", async (req, res, next) => {
         await deleteOrder(req.db, orderID);
         return;
       } else
-        return res.status(201).json({
+        res.status(201).json({
           id: orderID,
         });
+      const subscribers = await getSubscribers(req.db);
+      const services_names = services
+        .map((s) => SERVICES_NAMES.get(s))
+        .join(",");
+      const message = `Новая запись <a href='${
+        process.env.ADMIN_HOST
+      }/orders/${orderID}'>№ ${orderID}</a>\n\nИмя: ${client.name}\nТелефон: ${
+        client.phone
+      }\nНомер машины: ${client.carNumber}${
+        client.carType ? `\nТип машины: ${client.carType}` : ""
+      }\nУслуги: ${services_names}`;
+      subscribers.forEach((subscriber) =>
+        botSendMessage(subscriber.chat_id, message)
+      );
     } catch (error) {
       res.status(500).json({
         code: 500,
