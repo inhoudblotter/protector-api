@@ -7,7 +7,7 @@ import { deleteToken } from "database/registerTokens/deleteToken";
 
 const router = Router();
 
-router.post(`/${process.env.TELEGRAM_KEY}`, async (req, _, next) => {
+router.post("/", async (req, _, next) => {
   const { message } = req.body;
   const username = message.from.username;
   const chat_id = Number(message.from.chat.id);
@@ -30,7 +30,7 @@ router.post(`/${process.env.TELEGRAM_KEY}`, async (req, _, next) => {
       await deleteToken(req.db, token);
     }
   }
-  botSendMessage(chat_id, "Неизвестная команда.");
+  return botSendMessage(chat_id, "Неизвестная команда.");
 });
 
 export default router;
