@@ -19,7 +19,7 @@ import { ISettings } from "types/ISettings";
 import { IOrder } from "types/IOrder";
 import { botSendMessage } from "utils/botSendMessage";
 import { getSubscribers } from "database/subscribersTelegram/getSubscribers";
-import { SERVICES_NAMES } from "config/constants";
+import { SERVICES_NAMES, CAR_TYPES_NAMES } from "config/constants";
 
 const router = Router();
 
@@ -78,7 +78,9 @@ router.post("/", async (req, res, next) => {
       }/orders/${orderID}'>№ ${orderID}</a>\n\nИмя: ${client.name}\nТелефон: ${
         client.phone
       }\nНомер машины: ${client.carNumber}${
-        client.carType ? `\nТип машины: ${client.carType}` : ""
+        client.carType
+          ? `\nТип машины: ${CAR_TYPES_NAMES.get(client.carType)}`
+          : ""
       }\nУслуги: ${services_names}`;
       subscribers.forEach((subscriber) =>
         botSendMessage(subscriber.chat_id, message)

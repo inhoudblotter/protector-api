@@ -39,6 +39,12 @@ export const CAR_TYPES = new Map([
   ["crossover", true],
 ]);
 
+export const CAR_TYPES_NAMES = new Map([
+  ["passengerCar", "легковой"],
+  ["suv", "внедорожник"],
+  ["crossover", "коссовер"],
+]);
+
 export const SESSION_COOKIE = {
   maxAge: 7 * 24 * 60 * 60 * 1000,
   httpOnly: true,

@@ -9,6 +9,7 @@ const router = Router();
 
 router.post("/", async (req, _, next) => {
   const { message } = req.body;
+  console.log(req.body);
   const username = message.from.username;
   const chat_id = Number(message.from.chat.id);
   const token = message.text;
