@@ -10,7 +10,6 @@ const router = Router();
 
 router.post("/", async (req, res, next) => {
   res.sendStatus(200);
-  console.log(req.body);
   if (!isTelegramUpdate(req.body))
     return next(
       new Error(`Unknown telegram scheme:\n ${JSON.stringify(req.body)}`)
