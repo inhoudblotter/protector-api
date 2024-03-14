@@ -8,7 +8,9 @@ import { isTelegramUpdate } from "types/ITelegramUpdate";
 
 const router = Router();
 
-router.post("/", async (req, _, next) => {
+router.post("/", async (req, res, next) => {
+  res.sendStatus(200);
+  console.log(req.body);
   if (!isTelegramUpdate(req.body))
     return next(
       new Error(`Unknown telegram scheme:\n ${JSON.stringify(req.body)}`)
@@ -29,7 +31,6 @@ router.post("/", async (req, _, next) => {
       await deleteToken(req.db, token);
     }
   }
-  return botSendMessage(chat_id, "Неизвестная команда.");
 });
 
 export default router;
