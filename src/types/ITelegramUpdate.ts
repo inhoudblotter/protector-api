@@ -14,7 +14,8 @@ interface ITelegramUpdate {
     chat: {
       id: number;
       // first_name: string;
-      username: string;
+      username?: string;
+      first_name?: string;
       // type: string;
     };
     // date: number;
@@ -29,8 +30,11 @@ export function isTelegramUpdate(body: unknown): body is ITelegramUpdate {
   const { chat, text } = message;
   if (typeof text !== "string") return false;
   if (!isObject(chat)) return false;
-  const { id, username } = chat;
+  const { id, username, first_name } = chat;
   if (typeof id !== "number") return false;
-  if (typeof username !== "string" || username.length > 100) return false;
+  if (username && (typeof username !== "string" || username.length > 100))
+    return false;
+  if (first_name && (typeof first_name !== "string" || first_name.length > 100))
+    return false;
   return true;
 }

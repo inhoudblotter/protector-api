@@ -16,7 +16,10 @@ router.post("/", async (req, res, next) => {
     );
   const token = req.body.message.text;
   const chat_id = req.body.message.chat.id;
-  const username = req.body.message.chat.username;
+  const username =
+    req.body.message.chat.username ||
+    req.body.message.chat.first_name ||
+    Date.now().toString(32);
   if (isToken(token)) {
     const passed = await isRegisterToken(req.db, token);
     if (passed) {
