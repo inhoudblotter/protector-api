@@ -25,6 +25,10 @@ router.post("/", async (req, res, next) => {
     if (passed) {
       try {
         await addSubscriber(req.db, chat_id, username);
+        botSendMessage(
+          chat_id,
+          "Теперь вам будут приходить уведомления о новых записях."
+        );
       } catch (error) {
         if (error instanceof Error && error.message === "AlreadyExists") {
           botSendMessage(chat_id, "Вы уже подписаны на рассылку.");

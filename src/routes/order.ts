@@ -81,7 +81,14 @@ router.post("/", async (req, res, next) => {
         client.carType
           ? `\nТип машины: ${CAR_TYPES_NAMES.get(client.carType)}`
           : ""
-      }\nУслуги: ${services_names}`;
+      }\nУслуги: ${services_names}\nДата и время: ${new Date(
+        date
+      ).toLocaleTimeString("ru-RU", {
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
       subscribers.forEach((subscriber) =>
         botSendMessage(subscriber.chat_id, message)
       );

@@ -19,7 +19,7 @@ export function checkCorrectOrderInsert(
     const atWorkLength = atWork.length;
 
     atWork = atWork.filter((el) => {
-      return el.completion_time >= startTime.getTime();
+      return el.completion_time <= startTime.getTime();
     });
     const atWorkChanged = atWork.length !== atWorkLength;
     // Если изменилось количество машин,
