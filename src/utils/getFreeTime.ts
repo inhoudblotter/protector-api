@@ -25,17 +25,15 @@ export function getFreeTime(
 
   if (timePointer.getTime() === today.getTime()) {
     today = new Date();
-    let m = today.getMinutes();
-    m = Math.ceil(m / 15) * 15;
-    today.setMinutes(m);
+    today.setMinutes(Math.ceil(today.getMinutes() / 15) * 15);
     // Если выбрана текущая дата и при этом не осталось свободного времени, то возращаем пустой массив.
     if (today.getTime() > breakEnd) {
       return times;
       // Если рабочий день уже начался, то двигаем курсор на текущее время.
     } else if (
-      temp.getHours() > workTime.from.hours ||
-      (temp.getHours() === workTime.from.hours &&
-        temp.getMinutes() > workTime.from.minutes)
+      today.getHours() > workTime.from.hours ||
+      (today.getHours() === workTime.from.hours &&
+        today.getMinutes() > workTime.from.minutes)
     ) {
       timePointer = new Date(today);
       // Иначе устанавливаем на начало рабочего дня.

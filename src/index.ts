@@ -12,7 +12,6 @@ import settingsRouter from "routes/settings";
 import freeTimeRouter from "routes/freeTime";
 import telegramRouter from "routes/telegram";
 import { errorHandler } from "./middlewares/errorHandler";
-import { setTelegramWebhook } from "utils/setTelegramWebhook";
 
 dotenv.config();
 
@@ -56,9 +55,6 @@ async function main() {
 
   app.listen(PORT, async () => {
     console.log("Server started on http://localhost:" + PORT);
-    await setTelegramWebhook(
-      `${process.env.HOST}/telegram/${process.env.TELEGRAM_KEY}`
-    );
   });
 }
 
